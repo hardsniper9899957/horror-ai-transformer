@@ -3,8 +3,11 @@ name: Build and Release EXE
 on:
   push:
     tags:
-      - "v*.*.*"
-  workflow_dispatch:
+      - "v*.*.*"        # v1.0.0 kimi tag atanda avtomatik işləsin
+  workflow_dispatch:     # istəsən əl ilə də işə sala biləsən
+
+permissions:
+  contents: write        # release yaratmaq üçün lazımdır
 
 jobs:
   build:
@@ -12,28 +15,39 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18
 
       - name: Install dependencies
         run: npm install
 
-      - name: Build app
+      # Vite build (dist/ yaradılır)
+      - name: Build web (Vite)
+        run: npm run build
+
+      # Electron installer (.exe) yığılır
+      - name: Build Electron installer
         run: npm run electron:build
 
+      # ✅ v4 istifadə edirik (v3 deprecate olunub)
       - name: Upload EXE artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: HorrorAI-Setup
-          path: dist/**/*.exe
+          path: |
+            dist/**/*.exe
+            dist/*.exe
 
+      # Release-ə EXE əlavə et
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
-          files: dist/**/*.exe
+          files: |
+            dist/**/*.exe
+            dist/*.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
