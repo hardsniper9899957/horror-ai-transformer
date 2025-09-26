@@ -29,11 +29,11 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: HorrorAI-Setup
-          path: dist/*.exe
+          path: dist/**/*.exe
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: dist/*.exe
+          files: dist/**/*.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
