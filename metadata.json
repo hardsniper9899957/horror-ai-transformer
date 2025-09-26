@@ -1,0 +1,5 @@
+{
+  "name": "Horror AI Transformer",
+  "description": "Upload a photo and this AI system will transform it into a photorealistic, ultra-realistic horror-style image. Refine the output with prompts, and then convert the final image into a terrifying cinematic video with custom sound effects.",
+  "requestFramePermissions": []
+}
